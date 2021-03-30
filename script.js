@@ -4,6 +4,7 @@ var timeBox = document.querySelector(".time");
 var startBtn = document.querySelector("#start");
 var mainEl = document.getElementById("main");
 var flashCard = document.getElementById("flashcard");
+var scoreChart = document.getElementById("high-scores");
 var question = document.querySelector(".question")
 var answer1 = document.querySelector("#answer1");
 var answer2 = document.querySelector("#answer2");
@@ -13,36 +14,105 @@ var result = document.querySelector(".result");
 var scoreResult = document.querySelector(".score");
 var scoreBoards = document.querySelector("#scoreboard");
 var score=0;
-var secondsLeft = 50;
+var secondsLeft = 100;
+var userName;
+var tdUserName = document.querySelector("#username");
+var tdHighScore = document.querySelector("#userscore");
+var playAgain;
+var timeValue = null;
+var questions = [{quizQuestion: "what color is grass",
+                answers: ["red","green","brown","purple"],
+                correctAnswer: "green"}, 
+                
+                {quizQuestion: "what color is a strawberry",
+                answers: ["red","blue","brown","yellow"],
+                correctAnswer: "red"}, 
+                
+                {quizQuestion: "what color is a lemon",
+                answers: ["purple","yellow","brown","purple"],
+                correctAnswer: "yellow"}, 
+                
+                {quizQuestion: "what color is the sky",
+                answers: ["red","green","brown","blue"],
+                correctAnswer: "blue"}]
 
+
+// think about using a for loop for this
+// function startQuestions(){
+//     for (i=0; i<questions.length; i++)
+//     {question.textContent=JSON.stringify(questions[i])}
+
+function displayQuestion(questions, no, previousQuestion, nextQuestion)
+{
+    var answerElements = [answer1, answer2, answer3, answer4];
+    question.textContent = questions[no].quizQuestion;
+    for (var i=0; i<answerElements.length; i++)
+    {
+
+        if (no > 0)
+        {
+            var wasItTheRightAnswer = questions[no-1].answers[i] == questions[no-1].correctAnswer;
+            answerElements[i].removeEventListener("click", wasItTheRightAnswer ? addScore : minusScore)
+            if (previousQuestion) answerElements[i].removeEventListener("click", previousQuestion)
+        }
+        
+        var isThisTheRightAnswer = questions[no].answers[i] == questions[no].correctAnswer;
+        answerElements[i].textContent = questions[no].answers[i];
+        answerElements[i].setAttribute("value", questions[no].answers[i]);
+        answerElements[i].addEventListener("click", isThisTheRightAnswer ? addScore : minusScore)
+        if (nextQuestion) answerElements[i].addEventListener("click", nextQuestion);
+
+    }
+}
+
+function startQuestions()
+{
+    displayQuestion(questions, 0, null, secondQuestion);
+}
+
+function secondQuestion()
+{
+    displayQuestion(questions, 1, secondQuestion, thirdQuestion);
+}
+
+function thirdQuestion()
+{
+    displayQuestion(questions, 2, thirdQuestion, fourthQuestion);
+}
+
+function fourthQuestion()
+{
+    displayQuestion(questions, 3, fourthQuestion, quizCompleted);
+}
 
 function addScore(){
     result.textContent="right answer";
-    score = score + 1;
+    score +=1;
     scoreResult.textContent= score;
 
 }
 
 function minusScore(){
     result.textContent="wrong answer";
-    
+    secondsLeft-=10;
 }
 
 function startTimer() {
 startBtn.setAttribute("style", "visibility: hidden; ");
 flashCard.setAttribute("style","visibility: visible; ");
-  var timerInterval = setInterval(function() {
+  timeValue = setInterval(function() {
   secondsLeft--;
   timeBox.textContent = secondsLeft + " seconds left";
   if(secondsLeft <= 0) {
-      clearInterval(timerInterval);
+      clearInterval(timerValue);
       gameOver();
     }
   }, 1000);
 }
 
-
-    
+function stopTimer() {
+    clearInterval(timeValue);
+ }
 
 
 function gameOver() {
@@ -56,110 +126,53 @@ function gameOver() {
 
 }
 
+function getUserName(){
+    userName = prompt("Please enter your name");
+    var liElname = document.createElement("li");
+    liElname.textContent= userName;
+    tdUserName.appendChild(liElname);
+
+
+
+    var liElscore = document.createElement("li");
+    liElscore.textContent= score;
+    tdHighScore.appendChild(liElscore)
+
+
+}
+
+function replay(){
+    var replayResponse = window.confirm("play again?");
+        if (replayResponse==true) {
+        playAgain=true;
+        
+        }
+        else {
+                
+        playAgain=false;
+        return;}
+            }
+
+
 function quizCompleted(){
     flashCard.setAttribute("style","visibility: hidden; ");
-
-}
-function fifthQuestion() {
-    question.textContent = "what color is the sky";
-    answer1.textContent = "green";
-    answer2.textContent = "brown";
-    answer3.textContent = "yellow";
-    answer4.textContent = "blue";
-    answer1.addEventListener("click", minusScore);
-    answer1.addEventListener("click", quizCompleted);
-    answer2.addEventListener("click", minusScore);
-    answer2.addEventListener("click", quizCompleted);
-    answer3.addEventListener("click", minusScore);
-    answer3.addEventListener("click", quizCompleted);
-    answer4.addEventListener("click", addScore);
-    answer4.addEventListener("click", quizCompleted);
-}
-
-function fourthQuestion() {
-    question.textContent = "what color is a tangerine";
-    answer1.textContent = "violet";
-    answer2.textContent = "orange";
-    answer3.textContent = "maroon";
-    answer4.textContent = "cyan";
-    answer1.addEventListener("click", minusScore);
-    answer1.addEventListener("click", fifthQuestion);
-    answer2.addEventListener("click", addScore);
-    answer2.addEventListener("click", fifthQuestion);
-    answer3.addEventListener("click", minusScore);
-    answer3.addEventListener("click", fifthQuestion);
-    answer4.addEventListener("click", minusScore);
-    answer4.addEventListener("click", fifthQuestion);
-    return;
-}
-
-function thirdQuestion() {
-    question.textContent = "what color is a lemon";
-    answer1.textContent = "magenta";
-    answer2.textContent = "turquiose";
-    answer3.textContent = "blue";
-    answer4.textContent = "yellow";
-    answer1.addEventListener("click", minusScore);
-    answer1.addEventListener("click", fourthQuestion);
-    answer2.addEventListener("click", minusScore);
-    answer2.addEventListener("click", fourthQuestion);
-    answer3.addEventListener("click", minusScore);
-    answer3.addEventListener("click", fourthQuestion);
-    answer4.addEventListener("click", addScore);
-    answer4.addEventListener("click", fourthQuestion);
-    return;
-}
-
-function secondQuestion() {
-    question.textContent = "what color is a strawberry";
-    answer1.textContent = "purple";
-    answer2.textContent = "blue";
-    answer3.textContent = "red";
-    answer4.textContent = "orange";
+    mainEl.textContent = "you have finished the quiz your score is " + score;
+    scoreChart.setAttribute("style","visibility: visible; ");
+    getUserName();
+    stopTimer();
     
-    answer1.addEventListener("click", minusScore);
-    answer1.addEventListener("click", thirdQuestion);
-    answer2.addEventListener("click", minusScore);
-    answer2.addEventListener("click", thirdQuestion);
-    answer3.addEventListener("click", addScore);
-    answer3.addEventListener("click", thirdQuestion);
-    answer4.addEventListener("click", minusScore);
-    answer4.addEventListener("click", thirdQuestion);
-    return;
+    
 }
 
 
-function firstQuestion() {
-    question.textContent = "what color is grass";
-    answer1.textContent = "green";
-    answer2.textContent = "orange";
-    answer3.textContent = "red";
-    answer4.textContent = "pink";
-
-    answer1.addEventListener("click", addScore);
-    answer1.addEventListener("click", secondQuestion);
-    answer2.addEventListener("click", minusScore);
-    answer2.addEventListener("click", secondQuestion);
-    answer3.addEventListener("click", minusScore);
-    answer3.addEventListener("click", secondQuestion);
-    answer4.addEventListener("click", minusScore);
-    answer4.addEventListener("click", secondQuestion);
-return;}
 
 
 
 
 
-
-
-
-
-function startGame(){
+function startQuiz(){
     startTimer();
-    firstQuestion();
+    startQuestions();
 }
-startBtn.addEventListener("click", startGame);
-
-
-
+startBtn.addEventListener("click", startQuiz);
 

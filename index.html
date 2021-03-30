@@ -7,7 +7,9 @@
     <title>Coding Quiz</title>
 </head>
 <body>
-<header><div class><a href="#"> View High Scores</a></div><div class="timebox"><h1 class="time"></h1></div></header>
+<header>
+<div class><a href="#"> View High Scores</a></div><div class="timebox">
+    <h1 class="time"></h1></div></header>
  <div id="main"></div>
  
  <div id="flashcard" style="visibility: hidden;"><h5 class="question"></h5>
@@ -17,13 +19,20 @@
 <li><button id="answer3"></button></li>
 <li><button id="answer4"></button></li>
 </ul>
-<div id="scoreboard"><p class="result">Your Scores are</p>
+<div id="scoreboard"><p class="result"></p>
 <p>your score is</p><p class="score"></p></div>
 </div>
 
 
 <button id="start">Start</button>  
+<div id="high-scores" style="visibility: hidden;">High Scores<br>
+<table id ="highscores"><tr>
+    <td>Name<br><ul id="username"></ul></td>
+    <td>Score<br><ul id="userscore"></ul></td></tr>
 
+</table>
+</div>
 <script src="script.js"></script>
+
 </body>
 </html>
