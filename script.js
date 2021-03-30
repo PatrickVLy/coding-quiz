@@ -1,5 +1,3 @@
-// Selects element by class
-//We store the interval in a variable. This is an important step, so that we can get the interval to stop. 
 var timeBox = document.querySelector(".time");
 var startBtn = document.querySelector("#start");
 var mainEl = document.getElementById("main");
@@ -145,7 +143,8 @@ function replay(){
     var replayResponse = window.confirm("play again?");
         if (replayResponse==true) {
         playAgain=true;
-        
+        score = 0;
+        startQuiz();
         }
         else {
                 
@@ -160,7 +159,7 @@ function quizCompleted(){
     scoreChart.setAttribute("style","visibility: visible; ");
     getUserName();
     stopTimer();
-    
+   
     
 }
 
