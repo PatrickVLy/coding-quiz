@@ -31,11 +31,35 @@ These are the steps I did to finish the project
 
 2. Created an array with a nested object with the key items question, answers, and correct answers
 
-3. created a funtion to start the quiz and start the timer when the start button is pressed which is triggered by an event listener. 
+3. created a function to start the quiz and start the timer when the start button is pressed which is triggered by an event listener. 
 
 4. created a function so that when wrong answer is pressed time is decremented by 10 seconds and notifies user of wrong answer, and when right answer is pressed adds one point to the score and notifies user of correct answer
 
 5. created a function to display the question using a for loop to iterate through each item in the the questions array then compared the user selection against the right answer
+```
+function displayQuestion(questions, no, previousQuestion, nextQuestion)
+{
+    var answerElements = [answer1, answer2, answer3, answer4];
+    question.textContent = questions[no].quizQuestion;
+    for (var i=0; i<answerElements.length; i++)
+    {
+
+        if (no > 0)
+        {
+            var wasItTheRightAnswer = questions[no-1].answers[i] == questions[no-1].correctAnswer;
+            answerElements[i].removeEventListener("click", wasItTheRightAnswer ? addScore : minusScore)
+            if (previousQuestion) answerElements[i].removeEventListener("click", previousQuestion)
+        }
+        
+        var isThisTheRightAnswer = questions[no].answers[i] == questions[no].correctAnswer;
+        answerElements[i].textContent = questions[no].answers[i];
+        answerElements[i].setAttribute("value", questions[no].answers[i]);
+        answerElements[i].addEventListener("click", isThisTheRightAnswer ? addScore : minusScore)
+        if (nextQuestion) answerElements[i].addEventListener("click", nextQuestion);
+
+    }
+}
+```
 
 6. created a function for each question, when the function is completed by the user selecting an answer button, the fucntion will call on the next question, until the last question which will call on the function of quizCompleted
 
@@ -44,4 +68,10 @@ These are the steps I did to finish the project
 8. created a function to run when the quiz is completed to prompt the user for their name and then stop the timer. 
 
 9. Created a function to log the user name and score into the high score table which will be visible when game is over
+
+## Technology Used
+
+1. HTML
+2. CSS
+3. Javascript
 
